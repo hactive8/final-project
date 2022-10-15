@@ -34,3 +34,42 @@ func (r *photorepository) CreatePhoto(photo *dto.CreatePhoto) (dto.CreatePhoto, 
 
 	return *photo, nil
 }
+
+func (r *photorepository) GetAllPhoto() ([]dto.GetAllPhoto, error) {
+	res := dto.GetUser{}
+
+	photo := entity.Photo{}
+	data := []dto.GetAllPhoto{}
+
+	_ = r.DB.Model(&photo).Find(&data)
+
+	// user
+	for i, v := range data {
+		result := r.DB.Model(&entity.User{}).Where("id = ?", v.UserID).First(&res)
+		if result.RowsAffected < 1 {
+			return data, result.Error
+		}
+		v.User = res
+
+		data = append(data[:i], v)
+	}
+
+	return data, nil
+}
+
+func (r *photorepository) UpdatePhoto(id int, photo *dto.UpdatePhoto) (dto.UpdatePhoto, error) {
+	photos := entity.Photo{
+		Title:    photo.Title,
+		Caption:  photo.Caption,
+		PhotoURL: photo.PhotoURL,
+		UserID:   photo.UserId,
+	}
+
+	result := r.DB.Model(&photos).Where("id = ?", id).Updates(&photos)
+
+	if result.RowsAffected < 1 {
+		return *photo, result.Error
+	}
+
+	return *photo, nil
+}

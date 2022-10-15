@@ -20,4 +20,6 @@ func RoutesPhoto(fiber *fiber.App, conf config.Config) {
 	app := fiber.Group("/photos")
 
 	app.Post("/", middlewares.JwtMiddleware(), ctrl.CreatePhoto)
+	app.Get("/", middlewares.JwtMiddleware(), ctrl.GetAllPhoto)
+	app.Put("/:photoId", middlewares.JwtMiddleware(), ctrl.UpdatePhoto)
 }
