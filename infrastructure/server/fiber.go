@@ -17,6 +17,7 @@ func InitServer() *fiber.App {
 	}))
 
 	routes.RoutesUser(app, conf)
+	routes.RoutesPhoto(app, conf)
 
 	return app
 }

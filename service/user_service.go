@@ -9,19 +9,19 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Service struct {
+type UserService struct {
 	Conf config.Config
 	repo interfaces.UserRepository
 }
 
 func NewUserService(conf config.Config, repo interfaces.UserRepository) interfaces.UserService {
-	return &Service{
+	return &UserService{
 		Conf: conf,
 		repo: repo,
 	}
 }
 
-func (s *Service) Register(user *dto.Register) (dto.Register, error) {
+func (s *UserService) Register(user *dto.Register) (dto.Register, error) {
 	// bcrypt password
 	pass, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
 
@@ -31,7 +31,7 @@ func (s *Service) Register(user *dto.Register) (dto.Register, error) {
 	return s.repo.Register(user)
 }
 
-func (s *Service) Login(email, password string) (string, error) {
+func (s *UserService) Login(email, password string) (string, error) {
 	login, err := s.repo.Login(email, password)
 	if err != nil {
 		return "", err
@@ -43,10 +43,10 @@ func (s *Service) Login(email, password string) (string, error) {
 	return token, nil
 }
 
-func (s *Service) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, error) {
+func (s *UserService) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, error) {
 	return s.repo.UpdateUser(id, user)
 }
 
-func (s *Service) DeleteUser(id uint) error {
+func (s *UserService) DeleteUser(id uint) error {
 	return s.repo.DeleteUser(id)
 }

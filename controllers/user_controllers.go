@@ -10,17 +10,17 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type controllers struct {
-	Service interfaces.UserService
+type usercontrollers struct {
+	UserService interfaces.UserService
 }
 
 func NewUserController(service interfaces.UserService) interfaces.UserController {
-	return &controllers{
-		Service: service,
+	return &usercontrollers{
+		UserService: service,
 	}
 }
 
-func (h *controllers) Register(c *fiber.Ctx) error {
+func (h *usercontrollers) Register(c *fiber.Ctx) error {
 	user := dto.Register{}
 
 	_ = c.BodyParser(&user)
@@ -30,7 +30,7 @@ func (h *controllers) Register(c *fiber.Ctx) error {
 		return utils.HandleErrorValidator(err, c)
 	}
 
-	result, err := h.Service.Register(&user)
+	result, err := h.UserService.Register(&user)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
@@ -45,7 +45,7 @@ func (h *controllers) Register(c *fiber.Ctx) error {
 	})
 }
 
-func (h *controllers) Login(c *fiber.Ctx) error {
+func (h *usercontrollers) Login(c *fiber.Ctx) error {
 	user := dto.Login{}
 
 	_ = c.BodyParser(&user)
@@ -55,7 +55,7 @@ func (h *controllers) Login(c *fiber.Ctx) error {
 		return utils.HandleErrorValidator(err, c)
 	}
 
-	result, err := h.Service.Login(user.Email, user.Password)
+	result, err := h.UserService.Login(user.Email, user.Password)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
@@ -70,7 +70,7 @@ func (h *controllers) Login(c *fiber.Ctx) error {
 	})
 }
 
-func (h *controllers) UpdateUser(c *fiber.Ctx) error {
+func (h *usercontrollers) UpdateUser(c *fiber.Ctx) error {
 	id := c.Params("userId")
 	uid, _ := strconv.Atoi(id)
 	user := dto.UpdateUser{}
@@ -82,7 +82,7 @@ func (h *controllers) UpdateUser(c *fiber.Ctx) error {
 		return utils.HandleErrorValidator(err, c)
 	}
 
-	result, err := h.Service.UpdateUser(uint(uid), &user)
+	result, err := h.UserService.UpdateUser(uint(uid), &user)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": err.Error(),
@@ -97,11 +97,11 @@ func (h *controllers) UpdateUser(c *fiber.Ctx) error {
 	})
 }
 
-func (h *controllers) DeleteUser(c *fiber.Ctx) error {
+func (h *usercontrollers) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("userId")
 	uid, _ := strconv.Atoi(id)
 
-	err := h.Service.DeleteUser(uint(uid))
+	err := h.UserService.DeleteUser(uint(uid))
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": err.Error(),

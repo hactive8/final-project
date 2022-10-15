@@ -9,17 +9,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type repository struct {
+type userrepository struct {
 	DB *gorm.DB
 }
 
 func NewUserRepository(db *gorm.DB) interfaces.UserRepository {
-	return &repository{
+	return &userrepository{
 		DB: db,
 	}
 }
 
-func (r *repository) Register(register *dto.Register) (dto.Register, error) {
+func (r *userrepository) Register(register *dto.Register) (dto.Register, error) {
 	user := entity.User{
 		Email:    register.Email,
 		Password: register.Password,
@@ -36,7 +36,7 @@ func (r *repository) Register(register *dto.Register) (dto.Register, error) {
 	return *register, nil
 }
 
-func (r *repository) Login(email, password string) (dto.Login, error) {
+func (r *userrepository) Login(email, password string) (dto.Login, error) {
 	user := entity.User{
 		Email:    email,
 		Password: password,
@@ -57,7 +57,7 @@ func (r *repository) Login(email, password string) (dto.Login, error) {
 	return login, nil
 }
 
-func (r *repository) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, error) {
+func (r *userrepository) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, error) {
 	userUpdate := entity.User{
 		Email:    user.Email,
 		Username: user.Username,
@@ -72,7 +72,7 @@ func (r *repository) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, 
 	return *user, nil
 }
 
-func (r *repository) DeleteUser(id uint) error {
+func (r *userrepository) DeleteUser(id uint) error {
 	user := entity.User{
 		ID: id,
 	}
