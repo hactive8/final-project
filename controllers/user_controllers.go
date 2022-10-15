@@ -4,6 +4,7 @@ import (
 	"hactive/final-project/dto"
 	"hactive/final-project/interfaces"
 	"hactive/final-project/utils"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -66,5 +67,50 @@ func (h *controllers) Login(c *fiber.Ctx) error {
 		"message": "Login successfully",
 		"code":    200,
 		"data":    result,
+	})
+}
+
+func (h *controllers) UpdateUser(c *fiber.Ctx) error {
+	id := c.Params("userId")
+	uid, _ := strconv.Atoi(id)
+	user := dto.UpdateUser{}
+
+	_ = c.BodyParser(&user)
+
+	err := validator.New().Struct(user)
+	if err != nil {
+		return utils.HandleErrorValidator(err, c)
+	}
+
+	result, err := h.Service.UpdateUser(uint(uid), &user)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": err.Error(),
+			"code":    404,
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "User updated successfully",
+		"code":    200,
+		"data":    result,
+	})
+}
+
+func (h *controllers) DeleteUser(c *fiber.Ctx) error {
+	id := c.Params("userId")
+	uid, _ := strconv.Atoi(id)
+
+	err := h.Service.DeleteUser(uint(uid))
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": err.Error(),
+			"code":    404,
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Your account has been successfully deleted",
+		"code":    200,
 	})
 }

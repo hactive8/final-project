@@ -13,6 +13,7 @@ type Login struct {
 	Password string `json:"password" validate:"required,min=6"`
 }
 
-type Token struct {
-	Token string `json:"token"`
+type UpdateUser struct {
+	Email    string `json:"email" validate:"required,email"`
+	Username string `json:"username" validate:"required"`
 }

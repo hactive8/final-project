@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"hactive/final-project/dto"
 	"hactive/final-project/entity"
 	"hactive/final-project/interfaces"
@@ -54,4 +55,33 @@ func (r *repository) Login(email, password string) (dto.Login, error) {
 	}
 
 	return login, nil
+}
+
+func (r *repository) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, error) {
+	userUpdate := entity.User{
+		Email:    user.Email,
+		Username: user.Username,
+	}
+
+	result := r.DB.Model(&userUpdate).Where("id = ?", id).Updates(&userUpdate)
+
+	if result.RowsAffected < 1 {
+		return *user, errors.New("user not found")
+	}
+
+	return *user, nil
+}
+
+func (r *repository) DeleteUser(id uint) error {
+	user := entity.User{
+		ID: id,
+	}
+
+	result := r.DB.Model(&user).Where("id = ?", id).Delete(&user)
+
+	if result.RowsAffected < 1 {
+		return errors.New("user not found")
+	}
+
+	return nil
 }

@@ -3,6 +3,7 @@ package routes
 import (
 	"hactive/final-project/config"
 	"hactive/final-project/controllers"
+	"hactive/final-project/infrastructure/middlewares"
 	"hactive/final-project/repository"
 	"hactive/final-project/service"
 
@@ -16,6 +17,10 @@ func RoutesUser(fiber *fiber.App, conf config.Config) {
 	srv := service.NewUserService(conf, repo)
 	ctrl := controllers.NewUserController(srv)
 
-	fiber.Post("/users/register", ctrl.Register)
-	fiber.Post("/users/login", ctrl.Login)
+	app := fiber.Group("/users")
+
+	app.Post("/register", ctrl.Register)
+	app.Post("/login", ctrl.Login)
+	app.Put("/:userId", middlewares.JwtMiddleware(), ctrl.UpdateUser)
+	app.Delete("/:userId", middlewares.JwtMiddleware(), ctrl.DeleteUser)
 }

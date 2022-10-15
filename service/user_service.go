@@ -42,3 +42,11 @@ func (s *Service) Login(email, password string) (string, error) {
 
 	return token, nil
 }
+
+func (s *Service) UpdateUser(id uint, user *dto.UpdateUser) (dto.UpdateUser, error) {
+	return s.repo.UpdateUser(id, user)
+}
+
+func (s *Service) DeleteUser(id uint) error {
+	return s.repo.DeleteUser(id)
+}
