@@ -55,3 +55,7 @@ func (s *PhotoService) UpdatePhoto(id int, photo *dto.UpdatePhoto) (dto.GetUpdat
 
 	return data, nil
 }
+
+func (s *PhotoService) DeletePhoto(id int) error {
+	return s.PhotoRepository.DeletePhoto(id)
+}

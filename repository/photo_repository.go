@@ -41,7 +41,11 @@ func (r *photorepository) GetAllPhoto() ([]dto.GetAllPhoto, error) {
 	photo := entity.Photo{}
 	data := []dto.GetAllPhoto{}
 
-	_ = r.DB.Model(&photo).Find(&data)
+	result := r.DB.Model(&photo).Find(&data)
+
+	if result.RowsAffected < 1 {
+		return data, result.Error
+	}
 
 	// user
 	for i, v := range data {
@@ -72,4 +76,16 @@ func (r *photorepository) UpdatePhoto(id int, photo *dto.UpdatePhoto) (dto.Updat
 	}
 
 	return *photo, nil
+}
+
+func (r *photorepository) DeletePhoto(id int) error {
+	photo := entity.Photo{}
+
+	result := r.DB.Model(&photo).Where("id = ?", id).Delete(&photo)
+
+	if result.RowsAffected < 1 {
+		return result.Error
+	}
+
+	return nil
 }

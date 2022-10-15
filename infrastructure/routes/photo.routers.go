@@ -22,4 +22,5 @@ func RoutesPhoto(fiber *fiber.App, conf config.Config) {
 	app.Post("/", middlewares.JwtMiddleware(), ctrl.CreatePhoto)
 	app.Get("/", middlewares.JwtMiddleware(), ctrl.GetAllPhoto)
 	app.Put("/:photoId", middlewares.JwtMiddleware(), ctrl.UpdatePhoto)
+	app.Delete("/:photoId", middlewares.JwtMiddleware(), ctrl.DeletePhoto)
 }

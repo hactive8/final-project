@@ -100,3 +100,20 @@ func (h *PhotoController) UpdatePhoto(c *fiber.Ctx) error {
 		"data":    result,
 	})
 }
+
+func (h *PhotoController) DeletePhoto(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("photoId"))
+
+	err := h.PhotoService.DeletePhoto(id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+			"code":    400,
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Photo deleted successfully",
+		"code":    200,
+	})
+}
