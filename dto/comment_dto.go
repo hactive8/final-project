@@ -1,1 +1,17 @@
 package dto
+
+import "time"
+
+type CreateComment struct {
+	Message string `json:"message" gorm:"not null" validate:"required"`
+	PhotoID uint   `json:"photo_id" gorm:"not null"`
+	UserID  uint   `json:"user_id" gorm:"not null"`
+}
+
+type GetComment struct {
+	ID        uint      `json:"id"`
+	Message   string    `json:"message"`
+	PhotoID   uint      `json:"photo_id"`
+	UserID    uint      `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
+}
