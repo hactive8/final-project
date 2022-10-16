@@ -59,3 +59,19 @@ func (r *sosmedRepository) GetSosmed() ([]dto.GetAllSosmed, error) {
 
 	return data, nil
 }
+
+func (r *sosmedRepository) UpdateSosmed(id uint, sosmed *dto.UpdateSosmed) (dto.UpdateSosmed, error) {
+	sos := entity.Sosmed{
+		Name:           sosmed.Name,
+		SocialMediaURL: sosmed.SocialMediaURL,
+		UserID:         sosmed.UserID,
+	}
+
+	result := r.DB.Model(&sos).Where("id = ?", id).Updates(&sos)
+
+	if result.RowsAffected < 1 {
+		return *sosmed, result.Error
+	}
+
+	return *sosmed, nil
+}

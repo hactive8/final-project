@@ -31,3 +31,7 @@ func (s *SosmedService) CreateSosmed(sosmed *dto.CreateSosmed) (dto.CreateSosmed
 func (s *SosmedService) GetSosmed() ([]dto.GetAllSosmed, error) {
 	return s.SosmedRepository.GetSosmed()
 }
+
+func (s *SosmedService) UpdateSosmed(id uint, sosmed *dto.UpdateSosmed) (dto.UpdateSosmed, error) {
+	return s.SosmedRepository.UpdateSosmed(id, sosmed)
+}

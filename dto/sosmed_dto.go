@@ -9,6 +9,13 @@ type CreateSosmed struct {
 	CreatedAt      time.Time `json:"created_at"`
 }
 
+type UpdateSosmed struct {
+	Name           string    `json:"name" gorm:"not null" validate:"required"`
+	SocialMediaURL string    `json:"social_media_url" gorm:"not null" validate:"required"`
+	UserID         uint      `json:"user_id" gorm:"not null"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
 type GetAllSosmed struct {
 	ID             uint      `json:"id" gorm:"column:id"`
 	Name           string    `json:"name"`

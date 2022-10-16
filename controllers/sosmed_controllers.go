@@ -3,6 +3,7 @@ package controllers
 import (
 	"hactive/final-project/dto"
 	"hactive/final-project/interfaces"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -59,6 +60,37 @@ func (s *SosmedController) GetSosmed(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"code":    200,
 		"message": "Sosmed fetched successfully",
+		"data":    data,
+	})
+}
+
+func (s *SosmedController) UpdateSosmed(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	ids := claims["id"].(float64)
+
+	id := c.Params("socialMediaId")
+	uid, _ := strconv.Atoi(id)
+
+	sosmed := dto.UpdateSosmed{
+		UpdatedAt: time.Now(),
+	}
+
+	_ = c.BodyParser(&sosmed)
+
+	data, err := s.SosmedService.UpdateSosmed(uint(uid), &sosmed)
+
+	data.UserID = uint(ids)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"code":    200,
+		"message": "Sosmed updated successfully",
 		"data":    data,
 	})
 }
