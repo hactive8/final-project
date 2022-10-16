@@ -33,3 +33,29 @@ func (r *sosmedRepository) CreateSosmed(sosmed *dto.CreateSosmed) (dto.CreateSos
 
 	return *sosmed, nil
 }
+
+func (r *sosmedRepository) GetSosmed() ([]dto.GetAllSosmed, error) {
+	res := dto.GetUser{}
+
+	sos := entity.Sosmed{}
+	data := []dto.GetAllSosmed{}
+
+	result := r.DB.Model(&sos).Find(&data)
+
+	if result.RowsAffected < 1 {
+		return data, result.Error
+	}
+
+	// user
+	for i, v := range data {
+		result := r.DB.Model(&entity.User{}).Where("id = ?", v.UserID).First(&res)
+		if result.RowsAffected < 1 {
+			return data, result.Error
+		}
+		v.User = res
+
+		data = append(data[:i], v)
+	}
+
+	return data, nil
+}

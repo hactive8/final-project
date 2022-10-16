@@ -46,3 +46,19 @@ func (s *SosmedController) CreateSosmed(c *fiber.Ctx) error {
 		"data":    data,
 	})
 }
+
+func (s *SosmedController) GetSosmed(c *fiber.Ctx) error {
+	data, err := s.SosmedService.GetSosmed()
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"code":    200,
+		"message": "Sosmed fetched successfully",
+		"data":    data,
+	})
+}

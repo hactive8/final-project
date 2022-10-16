@@ -20,4 +20,5 @@ func RoutesSosmed(fiber *fiber.App, conf config.Config) {
 	app := fiber.Group("/socialmedias")
 
 	app.Post("/", middlewares.JwtMiddleware(), ctrl.CreateSosmed)
+	app.Get("/", middlewares.JwtMiddleware(), ctrl.GetSosmed)
 }

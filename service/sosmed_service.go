@@ -27,3 +27,7 @@ func (s *SosmedService) CreateSosmed(sosmed *dto.CreateSosmed) (dto.CreateSosmed
 
 	return sos, nil
 }
+
+func (s *SosmedService) GetSosmed() ([]dto.GetAllSosmed, error) {
+	return s.SosmedRepository.GetSosmed()
+}
