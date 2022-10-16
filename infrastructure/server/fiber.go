@@ -19,6 +19,7 @@ func InitServer() *fiber.App {
 	routes.RoutesUser(app, conf)
 	routes.RoutesPhoto(app, conf)
 	routes.RoutesComment(app, conf)
+	routes.RoutesSosmed(app, conf)
 
 	return app
 }
