@@ -35,3 +35,11 @@ func (s *SosmedService) GetSosmed() ([]dto.GetAllSosmed, error) {
 func (s *SosmedService) UpdateSosmed(id uint, sosmed *dto.UpdateSosmed) (dto.UpdateSosmed, error) {
 	return s.SosmedRepository.UpdateSosmed(id, sosmed)
 }
+
+func (s *SosmedService) DeleteSosmed(id uint) error {
+	return s.SosmedRepository.DeleteSosmed(id)
+}
+
+func (s *SosmedService) GetSosmedByID(id uint) (dto.GetAllSosmed, error) {
+	return s.SosmedRepository.GetSosmedByID(id)
+}

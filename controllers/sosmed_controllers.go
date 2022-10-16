@@ -94,3 +94,21 @@ func (s *SosmedController) UpdateSosmed(c *fiber.Ctx) error {
 		"data":    data,
 	})
 }
+
+func (s *SosmedController) DeleteSosmed(c *fiber.Ctx) error {
+	id := c.Params("socialMediaId")
+	uid, _ := strconv.Atoi(id)
+
+	err := s.SosmedService.DeleteSosmed(uint(uid))
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"code":    200,
+		"message": "Your social media has been successfully deleted",
+	})
+}

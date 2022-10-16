@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"hactive/final-project/dto"
 	"hactive/final-project/interfaces"
 	"strconv"
@@ -102,7 +101,7 @@ func (h *CommentController) DeleteComment(c *fiber.Ctx) error {
 	id := c.Params("commentId")
 	uid, _ := strconv.Atoi(id)
 
-	cmt, err := h.CommentService.GetCommentId(uint(uid))
+	cmt, err := h.CommentService.GetCommentId(uint(ids))
 
 	if cmt.UserID != uint(ids) {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -117,9 +116,6 @@ func (h *CommentController) DeleteComment(c *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
-
-	fmt.Println("comment", cmt)
-	fmt.Println("user", uint(ids))
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Your comment has been successfully deleted",

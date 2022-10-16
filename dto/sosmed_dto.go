@@ -3,6 +3,7 @@ package dto
 import "time"
 
 type CreateSosmed struct {
+	ID             uint      `json:"id"`
 	Name           string    `json:"name" gorm:"not null" validate:"required"`
 	SocialMediaURL string    `json:"social_media_url" gorm:"not null" validate:"required"`
 	UserID         uint      `json:"user_id" gorm:"not null"`
@@ -10,6 +11,7 @@ type CreateSosmed struct {
 }
 
 type UpdateSosmed struct {
+	ID             uint      `json:"id"`
 	Name           string    `json:"name" gorm:"not null" validate:"required"`
 	SocialMediaURL string    `json:"social_media_url" gorm:"not null" validate:"required"`
 	UserID         uint      `json:"user_id" gorm:"not null"`

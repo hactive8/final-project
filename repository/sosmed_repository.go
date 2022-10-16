@@ -75,3 +75,28 @@ func (r *sosmedRepository) UpdateSosmed(id uint, sosmed *dto.UpdateSosmed) (dto.
 
 	return *sosmed, nil
 }
+
+func (r *sosmedRepository) DeleteSosmed(id uint) error {
+	sos := entity.Sosmed{}
+
+	result := r.DB.Model(&sos).Where("id = ?", id).Delete(&sos)
+
+	if result.RowsAffected < 1 {
+		return result.Error
+	}
+
+	return nil
+}
+
+func (r *sosmedRepository) GetSosmedByID(id uint) (dto.GetAllSosmed, error) {
+	sos := entity.Sosmed{}
+	data := dto.GetAllSosmed{}
+
+	result := r.DB.Model(&sos).Where("user_id = ?", id).First(&data)
+
+	if result.RowsAffected < 1 {
+		return data, result.Error
+	}
+
+	return data, nil
+}

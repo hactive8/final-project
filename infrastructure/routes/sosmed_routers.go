@@ -22,4 +22,5 @@ func RoutesSosmed(fiber *fiber.App, conf config.Config) {
 	app.Post("/", middlewares.JwtMiddleware(), ctrl.CreateSosmed)
 	app.Get("/", middlewares.JwtMiddleware(), ctrl.GetSosmed)
 	app.Put("/:socialMediaId", middlewares.JwtMiddleware(), ctrl.UpdateSosmed)
+	app.Delete("/:socialMediaId", middlewares.JwtMiddleware(), ctrl.DeleteSosmed)
 }
