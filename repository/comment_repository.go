@@ -109,3 +109,27 @@ func (r *commentRepository) GetPhotoId(id uint) (dto.GetPhotoUser, error) {
 
 	return photo, nil
 }
+
+func (r *commentRepository) DeleteComment(id uint) error {
+	cmt := entity.Comment{}
+
+	result := r.DB.Model(&cmt).Where("id = ?", id).Delete(&cmt)
+
+	if result.RowsAffected < 1 {
+		return result.Error
+	}
+
+	return nil
+}
+
+func (r *commentRepository) GetCommentId(id uint) (dto.GetComment, error) {
+	var comment dto.GetComment
+
+	result := r.DB.Model(&entity.Comment{}).Where("id = ?", id).First(&comment)
+
+	if result.RowsAffected < 1 {
+		return comment, result.Error
+	}
+
+	return comment, nil
+}

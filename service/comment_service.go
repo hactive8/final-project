@@ -71,3 +71,23 @@ func (s *CommentService) GetPhotoId(id uint) (dto.GetPhotoUser, error) {
 
 	return photo, nil
 }
+
+func (s *CommentService) DeleteComment(id uint) error {
+	err := s.CommentRepository.DeleteComment(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *CommentService) GetCommentId(id uint) (dto.GetComment, error) {
+	cmt, err := s.CommentRepository.GetCommentId(id)
+
+	if err != nil {
+		return cmt, err
+	}
+
+	return cmt, nil
+}

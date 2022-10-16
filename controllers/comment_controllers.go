@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"hactive/final-project/dto"
 	"hactive/final-project/interfaces"
 	"strconv"
@@ -90,5 +91,37 @@ func (h *CommentController) UpdateComment(c *fiber.Ctx) error {
 		"code":    200,
 		"message": "Comment updated successfully",
 		"data":    data,
+	})
+}
+
+func (h *CommentController) DeleteComment(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	ids := claims["id"].(float64)
+
+	id := c.Params("commentId")
+	uid, _ := strconv.Atoi(id)
+
+	cmt, err := h.CommentService.GetCommentId(uint(uid))
+
+	if cmt.UserID != uint(ids) {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+
+	err = h.CommentService.DeleteComment(uint(uid))
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	fmt.Println("comment", cmt)
+	fmt.Println("user", uint(ids))
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Your comment has been successfully deleted",
 	})
 }
