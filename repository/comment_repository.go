@@ -4,6 +4,7 @@ import (
 	"hactive/final-project/dto"
 	"hactive/final-project/entity"
 	"hactive/final-project/interfaces"
+	"sync"
 
 	"gorm.io/gorm"
 )
@@ -45,22 +46,35 @@ func (r *commentRepository) GetComment() ([]dto.GetAllComment, error) {
 
 	// get user and photo data
 	for i, v := range comments {
-		// get user data
-		user := dto.GetCommentUser{}
-		result := r.DB.Model(&entity.User{}).Where("id = ?", v.UserID).Find(&user)
-		if result.RowsAffected < 1 {
-			return comments, result.Error
+		wg := sync.WaitGroup{}
+		wg.Add(2)
+
+		var user dto.GetCommentUser
+		photo := dto.GetPhotoComment{}
+		var err error
+		go func() {
+			defer wg.Done()
+			result := r.DB.Model(&entity.User{}).Where("id = ?", v.UserID).First(&user)
+			if result.RowsAffected < 1 {
+				err = result.Error
+			}
+		}()
+
+		go func() {
+			defer wg.Done()
+			result := r.DB.Model(&entity.Photo{}).Where("id = ?", v.PhotoID).First(&photo)
+			if result.RowsAffected < 1 {
+				err = result.Error
+			}
+		}()
+
+		wg.Wait()
+
+		if err != nil {
+			return comments, err
 		}
 
 		v.User = user
-
-		// get photo data
-		photo := dto.GetPhotoComment{}
-		result = r.DB.Model(&entity.Photo{}).Where("id = ?", v.PhotoID).Find(&photo)
-		if result.RowsAffected < 1 {
-			return comments, result.Error
-		}
-
 		v.Photo = photo
 
 		comments = append(comments[:i], v)
