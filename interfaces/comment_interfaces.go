@@ -8,12 +8,15 @@ import (
 
 type CommentRepository interface {
 	CreateComment(comment *dto.CreateComment) (dto.CreateComment, error)
+	GetComment() ([]dto.GetAllComment, error)
 }
 
 type CommentService interface {
 	CreateComment(comment *dto.CreateComment) (dto.GetComment, error)
+	GetComment() ([]dto.GetAllComment, error)
 }
 
 type CommentController interface {
 	CreateComment(c *fiber.Ctx) error
+	GetComment(c *fiber.Ctx) error
 }

@@ -15,3 +15,14 @@ type GetComment struct {
 	UserID    uint      `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type GetAllComment struct {
+	ID        uint            `json:"id"`
+	Message   string          `json:"message"`
+	PhotoID   uint            `json:"photo_id"`
+	UserID    uint            `json:"user_id"`
+	CreatedAt time.Time       `json:"created_at"`
+	UpdatedAt time.Time       `json:"updated_at"`
+	User      GetCommentUser  `json:"user"`
+	Photo     GetPhotoComment `json:"photo"`
+}

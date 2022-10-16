@@ -20,4 +20,5 @@ func RoutesComment(fiber *fiber.App, conf config.Config) {
 	app := fiber.Group("/comments")
 
 	app.Post("/", middlewares.JwtMiddleware(), ctrl.CreateComment)
+	app.Get("/", middlewares.JwtMiddleware(), ctrl.GetComment)
 }

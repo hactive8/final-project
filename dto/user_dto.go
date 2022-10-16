@@ -22,3 +22,9 @@ type GetUser struct {
 	Email    string `json:"email" validate:"required,email"`
 	Username string `json:"username" validate:"required"`
 }
+
+type GetCommentUser struct {
+	ID       uint   `json:"id"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+}

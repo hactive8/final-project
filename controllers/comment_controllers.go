@@ -43,3 +43,19 @@ func (h *CommentController) CreateComment(c *fiber.Ctx) error {
 		"data":    data,
 	})
 }
+
+func (h *CommentController) GetComment(c *fiber.Ctx) error {
+	data, err := h.CommentService.GetComment()
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"code":    200,
+		"message": "Get all comment successfully",
+		"data":    data,
+	})
+}

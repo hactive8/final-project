@@ -45,3 +45,11 @@ type GetUpdatePhoto struct {
 	UserID    uint      `json:"user_id"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"column:updated_at"`
 }
+
+type GetPhotoComment struct {
+	ID       uint   `json:"id"`
+	Title    string `json:"title"`
+	Caption  string `json:"caption"`
+	PhotoURL string `json:"photo_url"`
+	UserID   uint   `json:"user_id"`
+}

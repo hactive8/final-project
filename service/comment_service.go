@@ -35,3 +35,13 @@ func (s *CommentService) CreateComment(comment *dto.CreateComment) (dto.GetComme
 
 	return data, nil
 }
+
+func (s *CommentService) GetComment() ([]dto.GetAllComment, error) {
+	comments, err := s.CommentRepository.GetComment()
+
+	if err != nil {
+		return comments, err
+	}
+
+	return comments, nil
+}
