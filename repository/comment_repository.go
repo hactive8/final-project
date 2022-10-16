@@ -82,3 +82,30 @@ func (r *commentRepository) GetComment() ([]dto.GetAllComment, error) {
 
 	return comments, nil
 }
+
+func (r *commentRepository) UpdateComment(id uint, comment *dto.UpdateComment) (dto.UpdateComment, error) {
+	cmt := entity.Comment{
+		Message: comment.Message,
+		UserID:  comment.UserID,
+	}
+
+	result := r.DB.Model(&cmt).Where("user_id = ?", id).Updates(&cmt)
+
+	if result.RowsAffected < 1 {
+		return *comment, result.Error
+	}
+
+	return *comment, nil
+}
+
+func (r *commentRepository) GetPhotoId(id uint) (dto.GetPhotoUser, error) {
+	var photo dto.GetPhotoUser
+
+	result := r.DB.Model(&entity.Photo{}).Where("user_id = ?", id).First(&photo)
+
+	if result.RowsAffected < 1 {
+		return photo, result.Error
+	}
+
+	return photo, nil
+}

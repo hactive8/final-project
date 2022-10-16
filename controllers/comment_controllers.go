@@ -3,6 +3,7 @@ package controllers
 import (
 	"hactive/final-project/dto"
 	"hactive/final-project/interfaces"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
@@ -56,6 +57,38 @@ func (h *CommentController) GetComment(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"code":    200,
 		"message": "Get all comment successfully",
+		"data":    data,
+	})
+}
+
+func (h *CommentController) UpdateComment(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	ids := claims["id"].(float64)
+
+	comment := dto.UpdateComment{}
+	id := c.Params("commentId")
+	uid, _ := strconv.Atoi(id)
+
+	_ = c.BodyParser(&comment)
+
+	data, err := h.CommentService.UpdateComment(uint(uid), &comment)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	if data.UserID != uint(ids) {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"code":    200,
+		"message": "Comment updated successfully",
 		"data":    data,
 	})
 }

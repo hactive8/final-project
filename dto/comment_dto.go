@@ -26,3 +26,17 @@ type GetAllComment struct {
 	User      GetCommentUser  `json:"user"`
 	Photo     GetPhotoComment `json:"photo"`
 }
+
+type UpdateComment struct {
+	Message string `json:"message" gorm:"not null" validate:"required"`
+	UserID  uint   `json:"user_id" gorm:"not null"`
+}
+
+type GetPhotoUser struct {
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	Caption   string    `json:"caption"`
+	PhotoURL  string    `json:"photo_url"`
+	UserID    uint      `json:"user_id"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

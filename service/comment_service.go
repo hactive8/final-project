@@ -45,3 +45,29 @@ func (s *CommentService) GetComment() ([]dto.GetAllComment, error) {
 
 	return comments, nil
 }
+
+func (s *CommentService) UpdateComment(id uint, comment *dto.UpdateComment) (*dto.GetPhotoUser, error) {
+	cmt, err := s.CommentRepository.UpdateComment(id, comment)
+	if err != nil {
+		return nil, err
+	}
+
+	photo, er := s.CommentRepository.GetPhotoId(id)
+	if er != nil {
+		return &photo, er
+	}
+
+	cmt.UserID = photo.UserID
+
+	return &photo, nil
+}
+
+func (s *CommentService) GetPhotoId(id uint) (dto.GetPhotoUser, error) {
+	photo, err := s.CommentRepository.GetPhotoId(id)
+
+	if err != nil {
+		return photo, err
+	}
+
+	return photo, nil
+}

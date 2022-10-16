@@ -21,4 +21,5 @@ func RoutesComment(fiber *fiber.App, conf config.Config) {
 
 	app.Post("/", middlewares.JwtMiddleware(), ctrl.CreateComment)
 	app.Get("/", middlewares.JwtMiddleware(), ctrl.GetComment)
+	app.Put("/:commentId", middlewares.JwtMiddleware(), ctrl.UpdateComment)
 }
